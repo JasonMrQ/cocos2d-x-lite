@@ -903,6 +903,21 @@ void AssetsManagerEx::prepareUpdate()
     _updateState = State::READY_TO_UPDATE;
 }
 
+//add Jason
+double AssetsManagerEx::getNeedDownloadSize(){
+    double totalSize = 0;
+    for(auto iter : _downloadUnits)
+    {
+        const DownloadUnit& unit = iter.second;
+        if (unit.size > 0)
+        {
+            totalSize += unit.size;
+        }
+    }
+    return totalSize;
+}
+
+//edit by Jason
 void AssetsManagerEx::startUpdate()
 {
     if (_updateState == State::NEED_UPDATE)
@@ -911,19 +926,27 @@ void AssetsManagerEx::startUpdate()
     }
     if (_updateState == State::READY_TO_UPDATE)
     {
-        _updateState = State::UPDATING;
-        std::string msg;
-        if (_downloadResumed)
-        {
-            msg = StringUtils::format("Resuming from previous unfinished update, %d files remains to be finished.", _totalToDownload);
-        }
-        else
-        {
-            msg = StringUtils::format("Start to update %d files from remote package.", _totalToDownload);
-        }
-        dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
-        batchDownload();
+        //need to do sthing here
+        long needDownloadSize = getNeedDownloadSize();
+        CCLOG("needDownloadSize = %lu",needDownloadSize);
+        dispatchUpdateEvent(EventAssetsManagerEx::EventCode::READY_TO_UPDATE);
     }
+}
+
+//add by Jason
+void AssetsManagerEx::confirmUpdate(){
+    _updateState = State::UPDATING;
+    std::string msg;
+    if (_downloadResumed)
+    {
+        msg = StringUtils::format("Resuming from previous unfinished update, %d files remains to be finished.", _totalToDownload);
+    }
+    else
+    {
+        msg = StringUtils::format("Start to update %d files from remote package.", _totalToDownload);
+    }
+    dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
+    batchDownload();
 }
 
 void AssetsManagerEx::updateSucceed()

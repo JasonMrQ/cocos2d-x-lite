@@ -90,7 +90,12 @@ public:
      *          he wants to update resources.
      */
     void checkUpdate();
-    
+
+    void confirmUpdate();
+
+    //get download files size
+    double getNeedDownloadSize();
+
     /** @brief Prepare the update process, this will cleanup download process flags, fill up download units with temporary manifest or remote manifest
      */
     void prepareUpdate();
