@@ -52,8 +52,10 @@
 #define SE_PRECONDITION2(condition, ret_value, ...) \
     do { \
         if ( ! (condition) ) { \
-            SE_LOGE("jsb: ERROR: File %s: Line: %d, Function: %s\n", __FILE__, __LINE__, __FUNCTION__ ); \
-            SE_LOGE(__VA_ARGS__); \
+            if( CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID && CC_TARGET_PLATFORM != CC_PLATFORM_IOS) {  \
+                SE_LOGE("jsb: ERROR: File %s: Line: %d, Function: %s\n", __FILE__, __LINE__, __FUNCTION__ ); \
+                SE_LOGE(__VA_ARGS__); \
+            } \
             return (ret_value); \
         } \
     } while(0)

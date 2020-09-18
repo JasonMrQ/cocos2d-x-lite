@@ -142,7 +142,7 @@ extern uint32_t __jsbInvocationCount;
         args.push_back(std::move(data)); \
         se::State state(nativeThisObject, args); \
         ret = funcName(state); \
-        if (!ret) { \
+        if (!ret  && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID && CC_TARGET_PLATFORM != CC_PLATFORM_IOS) { \
             SE_LOGE("[ERROR] Failed to invoke %s, location: %s:%d\n", #funcName, __FILE__, __LINE__); \
         } \
     }
